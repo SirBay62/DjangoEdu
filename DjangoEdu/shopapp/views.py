@@ -20,6 +20,7 @@ def shop_index(request: HttpRequest):
 
 def groups_list(request: HttpRequest):
     context = {
-        'groups': Group.objects.all(),
+        # 'groups': Group.objects.all(),
+        'groups': Group.objects.prefetch_related('permissions').all()
     }
     return render(request, template_name="shopapp/shop-groups.html", context = context )
