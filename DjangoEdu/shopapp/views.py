@@ -32,3 +32,9 @@ def products_list(request: HttpRequest):
         'products': Product.objects.all(),
     }
     return render(request, template_name="shopapp/products-list.html", context = context)
+
+def orders_list(request: HttpRequest):
+    context = {
+
+    }
+    return render(request, template_name="shopapp/orders-list.html", context = context)
