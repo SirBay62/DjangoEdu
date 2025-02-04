@@ -8,5 +8,4 @@ urlpatterns = [
     path ('groups/', groups_list, name='groups_list'),
     path ('products/', products_list, name='products_list'),
     path ('orders/', orders_list, name='orders_list'),
-
 ]
