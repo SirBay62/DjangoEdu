@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.contrib.auth.models import Group
 
-from .models import Product
+from .models import Product, Order
 
 
 def shop_index(request: HttpRequest):
@@ -15,26 +15,29 @@ def shop_index(request: HttpRequest):
         ('Smartphone', 999),
     ]
     context = {
-        "time_running":default_timer(),
+        "time_running": default_timer (),
         "products": products,
     }
-    return render( request, "shopapp/shop-index.html", context = context )
+    return render ( request, "shopapp/shop-index.html", context=context )
+
 
 def groups_list(request: HttpRequest):
     context = {
         # 'groups': Group.objects.all(),
-        'groups': Group.objects.prefetch_related('permissions').all()
+        'groups': Group.objects.prefetch_related ( 'permissions' ).all ()
     }
-    return render(request, template_name="shopapp/shop-groups.html", context = context )
+    return render ( request, template_name="shopapp/shop-groups.html", context=context )
+
 
 def products_list(request: HttpRequest):
     context = {
-        'products': Product.objects.all(),
+        'products': Product.objects.all (),
     }
-    return render(request, template_name="shopapp/products-list.html", context = context)
+    return render ( request, template_name="shopapp/products-list.html", context=context )
+
 
 def orders_list(request: HttpRequest):
     context = {
-
+        'orders': Order.objects.select_related ( 'user' ).all (),
     }
-    return render(request, template_name="shopapp/orders-list.html", context = context)
+    return render ( request, template_name="shopapp/orders-list.html", context=context )
