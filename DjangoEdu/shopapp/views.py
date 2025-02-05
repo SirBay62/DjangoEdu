@@ -38,6 +38,6 @@ def products_list(request: HttpRequest):
 
 def orders_list(request: HttpRequest):
     context = {
-        'orders': Order.objects.select_related ( 'user' ).all (),
+        'orders': Order.objects.select_related ( 'user' ).prefetch_related('products').all (),
     }
     return render ( request, template_name="shopapp/orders-list.html", context=context )
