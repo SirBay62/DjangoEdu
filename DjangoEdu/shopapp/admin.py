@@ -2,14 +2,33 @@ from django.contrib import admin
 
 from .models import Product, Order
 
+class OrderInline(admin.TabularInline):
+    model = Product.orders.through
+
 
 @admin.register ( Product )
 class ProductAdmin ( admin.ModelAdmin ):
-    # list_display = ('pk', 'name', 'description', 'price', 'discount')
+    inlines = [
+        OrderInline,
+    ]
     list_display = ('pk', 'name', 'description_short', 'price', 'discount')
     list_display_links = ('name', 'pk')
     ordering = ('-pk',)
     search_fields = ('name', 'description')
+    fieldsets = [
+        (None, {
+            'fields': ('name', 'description',)
+        }),
+        ('Price options', {
+            'fields': ('price', 'discount',),
+            'classes': ('collapse', 'wide')
+        }),
+        ('Extra fields', {
+            'classes': ('collapse', 'wide'),
+            'fields': ('archived',),
+            'description': ('Extra fields description'),
+        })
+    ]
 
     def description_short(self, obj: Product) -> str:
         if obj.description is None:
