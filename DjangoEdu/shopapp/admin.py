@@ -3,6 +3,7 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 
 from .models import Product, Order
+from .admin_mixins import ExportAsMixin
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
@@ -16,10 +17,11 @@ def mark_unarchived(modeladmin: admin.ModelAdmin, request:HttpRequest, queryset:
     queryset.update(archived=False)
 
 @admin.register ( Product )
-class ProductAdmin ( admin.ModelAdmin ):
+class ProductAdmin ( admin.ModelAdmin, ExportAsMixin ):
     actions = (
         mark_archived,
         mark_unarchived,
+        'export_csv',
     )
     inlines = [
         OrderInline,
