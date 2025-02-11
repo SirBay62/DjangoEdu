@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'requestdataapp/base.html' %}
 
-</body>
-</html>
+{% block title %}
+    File upload
+{% endblock %}
+
+{% block body %}
+    <h1>Upload file</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <input type="file" name="myfile">
+        </p>
+
+        <button type="submit">Upload</button>
+    </form>
+
+{% endblock %}
