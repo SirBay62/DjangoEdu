@@ -2,32 +2,51 @@
 from timeit import default_timer
 
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.models import Group
 
 from .models import Product, Order
-from .forms import ProductForm
+from .forms import GroupsForm
+# from .forms import ProductForm
 
+from django.views import View
 
-def shop_index(request: HttpRequest):
-    products = [
-        ('Laptop', 1999),
-        ('Desktop', 2999),
-        ('Smartphone', 999),
-    ]
-    context = {
-        "time_running": default_timer (),
-        "products": products,
-    }
-    return render ( request, "shopapp/shop-index.html", context=context )
+class ShopIndexView(View):
+    def get(self, request: HttpRequest)->HttpResponse:
+        products = [
+            ('Laptop', 1999),
+            ('Desktop', 2999),
+            ('Smartphone', 999),
+        ]
+        context = {
+            "time_running": default_timer (),
+            "products": products,
+        }
+        return render ( request, "shopapp/shop-index.html", context=context )
 
+class GroupListView(View):
+    def get(self, request: HttpRequest)->HttpResponse:
+        context = {
+            # 'groups': Group.objects.all(),
+            'form': GroupsForm(),
+            'groups': Group.objects.prefetch_related ( 'permissions' ).all ()
+        }
+        return render ( request, template_name="shopapp/shop-groups.html", context=context )
 
-def groups_list(request: HttpRequest):
-    context = {
-        # 'groups': Group.objects.all(),
-        'groups': Group.objects.prefetch_related ( 'permissions' ).all ()
-    }
-    return render ( request, template_name="shopapp/shop-groups.html", context=context )
+    def post(self, request: HttpRequest)->HttpResponse:
+        form = GroupsForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return redirect(request.path)
+
+class ProductDetaislView(View):
+    def get(self, request: HttpRequest, pk: int)->HttpResponse:
+        product = get_object_or_404(Product, pk=pk)
+        context = {
+            'product': product,
+        }
+        return render ( request, template_name="shopapp/product-details.html", context=context )
 
 
 def products_list(request: HttpRequest):
