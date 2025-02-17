@@ -23,8 +23,8 @@ class GroupsForm(ModelForm):
         model = Group
         fields = ['name']
 
-# class ProductForm(forms.ModelForm):
-#     class Meta:
-#         model = Product
-#         fields ='name', 'price', 'description', 'discount'
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields ='name', 'price', 'description', 'discount'
 

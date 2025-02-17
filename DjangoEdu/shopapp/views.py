@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 
 from .models import Product, Order
 from .forms import GroupsForm
+from .forms import ProductForm
 # from .forms import ProductForm
 
 from django.views import View
