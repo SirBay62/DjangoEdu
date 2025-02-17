@@ -42,13 +42,12 @@ class GroupListView(View):
 
         return redirect(request.path)
 
-class ProductDetaislView(View):
-    def get(self, request: HttpRequest, pk: int)->HttpResponse:
-        product = get_object_or_404(Product, pk=pk)
-        context = {
-            'product': product,
-        }
-        return render ( request, template_name="shopapp/product-details.html", context=context )
+class ProductDetaislView(DetailView):
+    template_name = "shopapp/product-details.html"
+    model = Product
+    context_object_name = "product"
+
+
 
 # class ProductListView(TemplateView):
 #     template_name = "shopapp/products-list.html"
