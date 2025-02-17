@@ -1,9 +1,11 @@
 # from email.policy import default
+from symtable import Class
 from timeit import default_timer
 
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.models import Group
+from django.views.generic import TemplateView
 
 from .models import Product, Order
 from .forms import GroupsForm
@@ -48,12 +50,20 @@ class ProductDetaislView(View):
         }
         return render ( request, template_name="shopapp/product-details.html", context=context )
 
+class ProductListView(TemplateView):
+    template_name = "shopapp/products-list.html"
 
-def products_list(request: HttpRequest):
-    context = {
-        'products': Product.objects.all (),
-    }
-    return render ( request, template_name="shopapp/products-list.html", context=context )
+    def get_context_data(self, **kwargs):
+        context = super(ProductListView, self).get_context_data(**kwargs)
+        context['products'] = Product.objects.all()
+        return context
+
+
+# def products_list(request: HttpRequest):
+#     context = {
+#         'products': Product.objects.all (),
+#     }
+#     return render ( request, template_name="shopapp/products-list.html", context=context )
 
 def create_product(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
