@@ -99,3 +99,16 @@ def orders_list(request: HttpRequest):
 #         # .prefetch_related ( 'products').all (),
 #     }
 #     # context_object_name = "orders"
+
+class OrderDetailView(DetailView):
+    template_name = "shopapp/order_details.html"
+    # queryset = {
+    #     Order.objects
+    #     .select_related ( 'user' )
+    #     .prefetch_related ( 'products')
+    # }
+    #
+    # context_object_name = "orders"
+
+    model = Product
+    context_object_name = "order"
