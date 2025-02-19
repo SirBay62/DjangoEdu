@@ -9,7 +9,6 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from .models import Product, Order
 from .forms import GroupsForm
 from .forms import ProductForm
-# from .forms import ProductForm
 
 from django.views import View
 
@@ -47,8 +46,6 @@ class ProductDetaislView(DetailView):
     model = Product
     context_object_name = "product"
 
-
-
 # class ProductListView(TemplateView):
 #     template_name = "shopapp/products-list.html"
 #
@@ -62,15 +59,11 @@ class ProductListView(ListView):
     model = Product
     context_object_name = "products"
 
-
 # def products_list(request: HttpRequest):
 #     context = {
 #         'products': Product.objects.all (),
 #     }
 #     return render ( request, template_name="shopapp/products-list.html", context=context )
-
-
-
 
 def create_product(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -88,10 +81,21 @@ def create_product(request: HttpRequest) -> HttpResponse:
 
     return render ( request, template_name="shopapp/create-product.html", context=context )
 
-
-
 def orders_list(request: HttpRequest):
     context = {
-        'orders': Order.objects.select_related ( 'user' ).prefetch_related('products').all (),
+        'orders':
+        Order.objects
+        .select_related ( 'user' )
+        .prefetch_related('products').all (),
     }
-    return render ( request, template_name="shopapp/orders-list.html", context=context )
+
+    return render ( request, template_name="shopapp/order_list.html", context=context )
+
+# class OrderListView(ListView):
+#     template_name = "shopapp/order_list.html"
+#     queryset = {
+#         Order.objects.all()
+#         # .select_related ( 'user' )
+#         # .prefetch_related ( 'products').all (),
+#     }
+#     # context_object_name = "orders"

@@ -12,12 +12,13 @@
             <div>
              <p> Order by {% firstof order.user.first_name order.user.username %}</p>
              <p> Promocode <code>{{ order.promocode }}</code></p>
+             <p> Promocode <code>{{ order.id }}</code></p>
              <p> Delivery address:  <code>{{ order.delivery_address }}</code></p>
             <div>
                 Products in order:
             </div>
                 <ul>
-                    {% for product in order.products.all %}
+                    {% for product in object_list %}
                         <li>{{ product.name }} for $ {{ product.price }}</li>
                     {% endfor %}
                 </ul>
