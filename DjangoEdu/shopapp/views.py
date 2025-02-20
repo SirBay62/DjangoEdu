@@ -110,5 +110,5 @@ class OrderDetailView(DetailView):
     #
     # context_object_name = "orders"
 
-    model = Product
+    model = Order
     context_object_name = "order"
