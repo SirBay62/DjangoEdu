@@ -12,7 +12,12 @@
         <div>Discount: {{ product.discount }}</div>
         <div>Archived: {{ product.archived }}</div>
     </div>
-    <dv>
+    <div>
         <a href="{% url 'shopapp:products_list' %}">Back to product list </a>
-    </dv>
+    </div>
+    <div>
+        <a href="{% url 'shopapp:product_delete' pk=product.pk %}">Delete product </a>
+{#        <a href="/shop/products/confirm-delete/" pk = product.pk >Delete product </a>#}
+{#        <a href="/shop/products/{{product.pk}}/confirm-delete/" >Delete product </a>#}
+    </div>
 {% endblock %}

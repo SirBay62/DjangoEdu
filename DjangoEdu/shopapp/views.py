@@ -4,6 +4,7 @@ from timeit import default_timer
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.models import Group
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .models import Product, Order
@@ -112,3 +113,8 @@ class OrderDetailView(DetailView):
 
     model = Order
     context_object_name = "order"
+
+class ProductDeleteView(DeleteView):
+    template_name = "shopapp/product_confirm_delete.html"
+    model = Product
+    success_url = reverse_lazy('shopapp:products_list')
