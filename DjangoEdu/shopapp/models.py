@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Product ( models.Model ):
+    """
+    Модель Product представляет товар,
+    который можно продавать в интернет - магазине
+
+    Заказы тут: :model:`shopapp.Order`
+    """
     class Meta:
         ordering = ('name',)
 
