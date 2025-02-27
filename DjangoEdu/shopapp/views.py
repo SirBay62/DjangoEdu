@@ -7,11 +7,42 @@ from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+
 from .models import Product, Order
 from .forms import GroupsForm
 from .forms import ProductForm
+from .serialazers import ProductSerializer
 
 from django.views import View
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ['name', 'description']
+    filterset_fields = [
+        'name',
+        'description',
+        'price',
+        'discount',
+        'archived'
+    ]
+    ordering_fields = [
+        'id',
+        'name',
+        'description',
+        'price',
+    ]
+
 
 class ShopIndexView(View):
     def get(self, request: HttpRequest)->HttpResponse:
@@ -118,3 +149,4 @@ class ProductDeleteView(DeleteView):
     template_name = "shopapp/product_confirm_delete.html"
     model = Product
     success_url = reverse_lazy('shopapp:products_list')
+
