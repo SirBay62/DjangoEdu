@@ -16,6 +16,7 @@ from rest_framework import viewsets
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
 from .models import Product, Order
@@ -25,6 +26,7 @@ from .serialazers import ProductSerializer
 
 from django.views import View
 
+@extend_schema(description='Product views CRUD')
 class ProductViewSet(ModelViewSet):
     """
     Набор представлений для действий над Product
@@ -51,6 +53,17 @@ class ProductViewSet(ModelViewSet):
         'description',
         'price',
     ]
+
+    @extend_schema(
+        summary='Get one product by id',
+        description='Retrieve one **product**, return 404 if not found',
+        responses={
+            200: ProductSerializer,
+            404: OpenApiResponse(description='Product not found. Empty response.'),
+        }
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 
 class ShopIndexView(View):

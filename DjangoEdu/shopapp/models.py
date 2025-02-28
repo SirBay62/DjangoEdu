@@ -12,11 +12,12 @@ class Product ( models.Model ):
     class Meta:
         ordering = ('name',)
 
-    name = models.CharField ( max_length=100 )
-    description = models.TextField ( null=True, blank=True )
+    name = models.CharField ( max_length=100, db_index=True )
+    description = models.TextField ( null=True, blank=True, db_index=True )
     price = models.DecimalField ( default=0, max_digits=10, decimal_places=2 )
     discount = models.SmallIntegerField ( default=0 )
     created_at = models.DateTimeField ( auto_now_add=True )
+
     archived = models.BooleanField ( default=False )
 
     # @property
