@@ -1,3 +1,7 @@
+"""
+В этом модуле лежат различные наборы представлений
+"""
+
 from symtable import Class
 from timeit import default_timer
 
@@ -5,7 +9,8 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (TemplateView, ListView, DetailView, CreateView,
+                                  UpdateView, DeleteView)
 
 from rest_framework import viewsets
 from rest_framework.viewsets import ModelViewSet
@@ -21,6 +26,10 @@ from .serialazers import ProductSerializer
 from django.views import View
 
 class ProductViewSet(ModelViewSet):
+    """
+    Набор представлений для действий над Product
+    Полный CRUD для сущностей товара
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
@@ -149,4 +158,3 @@ class ProductDeleteView(DeleteView):
     template_name = "shopapp/product_confirm_delete.html"
     model = Product
     success_url = reverse_lazy('shopapp:products_list')
-
