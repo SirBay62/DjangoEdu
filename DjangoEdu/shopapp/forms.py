@@ -28,3 +28,6 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields ='name', 'price', 'description', 'discount'
 
+class CSVImportForm(forms.Form):
+    csvfile = forms.FileField()
+
