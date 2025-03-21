@@ -29,5 +29,5 @@ class ProductForm(forms.ModelForm):
         fields ='name', 'price', 'description', 'discount'
 
 class CSVImportForm(forms.Form):
-    csvfile = forms.FileField()
+    csv_file = forms.FileField()
 
