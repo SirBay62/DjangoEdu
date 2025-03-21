@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.db.models import QuerySet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
+from django.urls import path
 
 from .models import Product, Order
 from .admin_mixins import ExportAsMixin
+from .forms import CSVImportForm
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
@@ -51,6 +54,24 @@ class ProductAdmin ( admin.ModelAdmin, ExportAsMixin ):
         if len ( obj.description ) > 48:
             return obj.description[:48] + '...'
         return obj.description
+
+    change_list_template = 'shopapp/products_changelist.html'
+
+    def import_csv(self, request: HttpRequest) -> HttpResponse:
+        form = CSVImportForm()
+        context = {
+            'form': form,
+        }
+        return render(request, 'admin/csv_form.html', context)
+
+    def  get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path('import-products-csv/',
+                 self.import_csv,
+                 name="import_products_csv"),
+        ]
+        return new_urls + urls
 
 # class ProductInline(admin.TabularInline):
 class ProductInline(admin.StackedInline):
