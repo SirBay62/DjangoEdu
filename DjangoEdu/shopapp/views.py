@@ -1,7 +1,7 @@
 """
 В этом модуле лежат различные наборы представлений
 """
-
+from dataclasses import fields, field
 from symtable import Class
 from timeit import default_timer
 
@@ -12,7 +12,11 @@ from django.urls import reverse_lazy
 from django.views.generic import (TemplateView, ListView, DetailView, CreateView,
                                   UpdateView, DeleteView)
 
+from csv import DictWriter
+
 from rest_framework import viewsets
+from rest_framework.request import Request
+from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -64,6 +68,29 @@ class ProductViewSet(ModelViewSet):
     )
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
+
+    @action(detail=False, methods=['get'])
+    def download(self, request: Request):
+        response = HttpResponse ( content_type='text/csv' )
+        filename = 'products-export.csv'
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+        queryset = self.filter_queryset ( self.get_queryset () )
+        fields = [
+            'name',
+            'description',
+            'price',
+        ]
+        queryset = queryset.only(*fields)
+        writer = DictWriter(response,fieldnames=fields)
+        writer.writeheader()
+
+        for product in queryset:
+            writer.writerow({
+                field: getattr(product, field)
+                for field in fields
+            })
+
+        return response
 
 
 class ShopIndexView(View):
